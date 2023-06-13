@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import ReactLogo from '../../assets/react.svg';
@@ -7,8 +7,12 @@ import ReactLogo from '../../assets/react.svg';
 export const SearchPlants = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [plants, setPlants] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [searchOrigin, setSearchOrigin] = useState('');
+  const [filteredByOrigin, setFilterdByOrigin] = useState([]);
+  // console.log("🚀 ~ file: SearchPlants.tsx:10 ~ SearchPlants ~ searchOrigin:", searchOrigin)
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,12 +30,23 @@ export const SearchPlants = () => {
       );
 
       const plantData = response.data.data;
+      if (searchOrigin === 'weee') {
+        console.log('bkjbhkjbkbkb')
+      } else {
+        console.log('elseeeee', searchOrigin)
+      }
+      console.log('plannnnnnntdata', plantData)
       setPlants(plantData);
     } catch (error) {
       console.error('Error searching plants:', error);
     }
 
     setIsLoading(false);
+  };
+
+  const handleSearchOrigin = function(e: ChangeEvent<HTMLInputElement>) {
+    setSearchOrigin(e.target.value);
+    handleSearchDelayed();
   };
 
   const handleSearchDelayed = () => {
@@ -63,9 +78,14 @@ export const SearchPlants = () => {
     }
   }, [location]);
 
+
   useEffect(() => {
     handleSearch();
   }, [searchTerm]);
+
+  useEffect(() => {
+    setFilterdByOrigin()
+  }, [plants]);
 
   const navigateToSearch = () => {
     navigate(`/search?plant=${encodeURIComponent(searchTerm)}`);
@@ -74,6 +94,7 @@ export const SearchPlants = () => {
   return (
     <div className={searchContainerClass}>
       <div className={searchBarClass}>
+        <input className="input input-primary" value={searchOrigin} onChange={(e) => {handleSearchOrigin(e);}}/>
         <input
           className="input input-primary"
           type="text"
