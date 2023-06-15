@@ -5,6 +5,7 @@ import path from 'path';
 
 import { favoritesRoutes } from './routes/favoritesRoutes';
 import { userRoutes } from './routes/userRoutes';
+import { plantsRoutes } from './routes/plantsRoutes';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(morgan('combined'));
 
 app.use('/api/users', userRoutes);
 app.use('/api/favorites', favoritesRoutes);
+app.use('/api/plants', plantsRoutes);
 
 const port = 3000;
 
